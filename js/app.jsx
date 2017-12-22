@@ -40,8 +40,7 @@ class Game extends React.Component {
     newBall() {
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 20;
-        this.dx = this.state.dx;
-        this.dy = this.state.dy;
+
 
     }
 
@@ -140,9 +139,6 @@ class Game extends React.Component {
     })
     }
 
-   handleTryAgain = (e) => {
-        this.drawGame();
-   }
 
 
     drawBall() {
@@ -188,13 +184,15 @@ class Game extends React.Component {
                 if (this.brk.visible === true) {
                     if (this.x > this.brk.x && this.x < this.brk.x + this.brickWidth &&
                         this.y > this.brk.y && this.y < this.brk.y + this.brickHeight) {
-                        this.dy = -this.dy;
+                        this.setState({
+                            dy: -this.state.dy
+                        });
                         this.brk.visible = 0;
                         var points = this.state.score + 1;
                         if (this.state.bonus === false) {
                             var num =  Math.random();
                             console.log(num);
-                            if (num > 0.7 && num < 1) {
+                            if (num > 0.5 && num < 1) {
                                 this.setState({
                                     bonus: true,
                                 });
@@ -217,8 +215,8 @@ class Game extends React.Component {
                                 level: this.state.level + 1,
                                 scoreAfterLevel: points,
                                 score: points,
-                                dx: this.state.dx - 0.5,
-                                dy: this.state.dy - 0.5,
+                                dx: -2 - (0.25* (this.state.level-1)),
+                                dy: -2 - (0.25* (this.state.level-1)),
                                 background: newColor,
                                 startGame: false,
                                 startInfo: "CLICK OR PRESS SPACE TO START",
@@ -252,12 +250,15 @@ class Game extends React.Component {
 
     }
 
-    bounceWalls(){
+    bounceWalls() {
         //from left and right
-        this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius ? this.dx = -this.dx : this.dx;
+        this.x + this.state.dx > this.canvas.width - this.ballRadius || this.x + this.state.dx < this.ballRadius ? this.setState({ dx: -this.state.dx}) : this.setState({ dx: this.state.dx});
         //from top
-        if(this.y + this.dy < this.ballRadius)
-        {this.dy = -this.dy }
+        if (this.y + this.state.dy < this.ballRadius) {
+            this.setState({
+                dy: -this.state.dy
+            })
+        }
     }
 
 
@@ -268,12 +269,12 @@ class Game extends React.Component {
             this.drawPaddle();
             this.drawBricks();
             this.collisionDetection();
-            this.x += this.dx;
-            this.y += this.dy;
+            this.x += this.state.dx;
+            this.y += this.state.dy;
             this.bounceWalls();
             if (this.state.bonus === true) {
                 this.drawBonusBrick(this.bonusBrickX, this.bonusBrickY +2);
-                if(this.bonusBrickY === this.canvas.height){
+                if(this.bonusBrickY >= this.canvas.height){
                     this.setState({
                         bonus: false,
                     })
@@ -290,50 +291,51 @@ class Game extends React.Component {
                                 });
                                 setTimeout(() => {
                                     this.setState({
-                                        paddleWidth: this.state.paddleWidth +25
+                                        paddleWidth: this.state.paddleWidth +25,
+
                                     })
                                 }, 5000);
                                 break;
 
                             case 1:
                                 this.setState({
-                                    paddleWidth: this.state.paddleWidth +25
+                                    paddleWidth: this.state.paddleWidth +30
                                 });
                                 setTimeout(() => {
                                     this.setState({
-                                        paddleWidth: this.state.paddleWidth -25
+                                        paddleWidth: this.state.paddleWidth -30,
                                     })
                                 }, 5000);
                                 break;
                             case 3:
                                 this.setState({
-                                    dx: this.state.dx -4,
-                                    dy: this.state.dy -4
+                                    dx: this.state.dx < 0 ? this.state.dx -1 : this.state.dx + 1,
+                                    dy: this.state.dy < 0 ? this.state.dy -1 : this.state.dy + 1,
                                 });
                                 setTimeout(() => {
                                     this.setState({
-                                        dx: this.state.dx +4,
-                                        dy: this.state.dy +4
+                                        dx: this.state.dx < 0 ? this.state.dx +1 : this.state.dx - 1,
+                                        dy: this.state.dy < 0 ? this.state.dy +1 : this.state.dy - 1,
                                     })
                                 }, 5000);
                                 break;
 
                             case 4:
                                 this.setState({
-                                    dx: this.state.dx +1.5,
-                                    dy: this.state.dy +1.5
+                                    dx: this.state.dx < 0 ? this.state.dx +1 : this.state.dx - 1,
+                                    dy: this.state.dy < 0 ? this.state.dy +1 : this.state.dy - 1,
                                 });
                                 setTimeout(() => {
                                     this.setState({
-                                        dx: this.state.dx -1.5,
-                                        dy: this.state.dy -1.5
+                                        dx: this.state.dx < 0 ? this.state.dx -1 : this.state.dx + 1,
+                                        dy: this.state.dy < 0 ? this.state.dy -1 : this.state.dy + 1,
                                     })
                                 }, 5000);
                                 break;
 
                             case 5:
                                 this.setState({
-                                    lives: this.state.lives +1
+                                    lives: this.state.lives +1,
                                 });
 
                                 break;
@@ -343,12 +345,15 @@ class Game extends React.Component {
             }
 
             //from paddle and bottom (game over)
-            if (
-                this.y + this.dy > this.canvas.height - this.ballRadius) {
+            if (this.y + this.state.dy > this.canvas.height - this.ballRadius) {
                 if (this.x >= this.paddleXPos && this.x <= this.paddleXPos + this.state.paddleWidth) {
-                    this.dy = -this.dy;
+                    this.setState({
+                        dy: -this.state.dy
+                    })
+
+
                 } else {
-                    if (this.state.lives > 0) {
+                    if (this.state.lives > 1) {
                         this.setState({
                             lives: this.state.lives - 1,
                             startGame: false,
@@ -377,6 +382,7 @@ class Game extends React.Component {
 //
         }
     }
+
 
     getRandomColor() {
         this.letters = '0123456789ABCDEF'.split('');
@@ -413,7 +419,7 @@ class Game extends React.Component {
 
             return (
                 <div className="game">
-                    <h1> BRAKE THE WALL </h1>
+                    <h1> BREAK THE WALL </h1>
                     <div className="results">
                         <h3> Score: {this.state.score}  </h3>
                         <h3> Lives: {this.state.lives}  </h3>
