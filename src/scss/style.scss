@@ -9,8 +9,10 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  padding-top: 30px;
+  padding: 150px;
   font-family: 'Special Elite', sans-serif;
+  width: 100 vh;
+  height: 100%;
 }
 
 @mixin flex {
