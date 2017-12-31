@@ -39,7 +39,7 @@ class Game extends React.Component {
 
     newBall() {
         this.x = this.canvas.width / 2;
-        this.y = this.canvas.height - 20;
+        this.y = this.canvas.height - this.paddleHeight - this.ballRadius;
 
 
     }
@@ -126,9 +126,11 @@ class Game extends React.Component {
     }
 
     handleMouseMove = (e) => {
-        var relativeX = e.clientX - this.canvas.offsetLeft;
-        if(relativeX  > this.state.paddleWidth/2 && relativeX < this.canvas.width - this.state.paddleWidth/2 ) {
-            this.paddleXPos = relativeX - this.state.paddleWidth/2;
+        if (this.state.startGame === true) {
+            var relativeX = e.clientX - this.canvas.offsetLeft;
+            if (relativeX > this.state.paddleWidth / 2 && relativeX < this.canvas.width - this.state.paddleWidth / 2) {
+                this.paddleXPos = relativeX - this.state.paddleWidth / 2;
+            }
         }
     }
 
@@ -344,7 +346,7 @@ class Game extends React.Component {
                 }
             }
 
-            //from paddle and bottom (game over)
+            // paddle and bottom (game over)
             if (this.y + this.state.dy > this.canvas.height - this.ballRadius) {
                 if (this.x >= this.paddleXPos && this.x <= this.paddleXPos + this.state.paddleWidth) {
                     this.setState({

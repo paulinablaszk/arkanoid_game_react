@@ -13644,9 +13644,11 @@ var Game = function (_React$Component) {
                 _this.leftKey = false;
             }
         }, _this.handleMouseMove = function (e) {
-            var relativeX = e.clientX - _this.canvas.offsetLeft;
-            if (relativeX > _this.state.paddleWidth / 2 && relativeX < _this.canvas.width - _this.state.paddleWidth / 2) {
-                _this.paddleXPos = relativeX - _this.state.paddleWidth / 2;
+            if (_this.state.startGame === true) {
+                var relativeX = e.clientX - _this.canvas.offsetLeft;
+                if (relativeX > _this.state.paddleWidth / 2 && relativeX < _this.canvas.width - _this.state.paddleWidth / 2) {
+                    _this.paddleXPos = relativeX - _this.state.paddleWidth / 2;
+                }
             }
         }, _this.handleStartClick = function (e) {
             _this.setState({
@@ -13670,7 +13672,7 @@ var Game = function (_React$Component) {
         key: 'newBall',
         value: function newBall() {
             this.x = this.canvas.width / 2;
-            this.y = this.canvas.height - 20;
+            this.y = this.canvas.height - this.paddleHeight - this.ballRadius;
         }
     }, {
         key: 'newBricks',
@@ -13927,7 +13929,7 @@ var Game = function (_React$Component) {
                     }
                 }
 
-                //from paddle and bottom (game over)
+                // paddle and bottom (game over)
                 if (this.y + this.state.dy > this.canvas.height - this.ballRadius) {
                     if (this.x >= this.paddleXPos && this.x <= this.paddleXPos + this.state.paddleWidth) {
                         this.setState({
