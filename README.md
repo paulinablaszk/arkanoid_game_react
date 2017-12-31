@@ -1,6 +1,6 @@
 # break_the_wall
 <i>Break the wall</i> is React arkanoid game
-Check it out at [https://paulinablaszk.github.io/break_the_wall/]
+
 
 <h3>Features</h3>
 * levels
