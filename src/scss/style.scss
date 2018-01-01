@@ -4,22 +4,17 @@
   box-sizing: border-box;
 }
 
-/*body {
-  background-image: url('../img/bricks.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  padding: 150px;
-  font-family: 'Special Elite', sans-serif;
-  width: 100 vh;
-  height: 100%;
-}*/
 
 @mixin flex {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+
+@mixin size {
+  width: 1000px;
+  height: 600px;
 }
 
 #app {
@@ -30,10 +25,9 @@
   background-size: cover;
   font-family: 'Special Elite', sans-serif;
   width: 100vw;
-  height: 100%;
-  padding: 100px;
-}
+  height: 100vh;
 
+}
 
 #canvas {
   display: block;
@@ -42,11 +36,11 @@
 
 .game {
   background: rgba(255, 255, 255, 0.8);
-  padding: 30px;
+  padding: 50px;
   text-align: center;
-  width: 70%;
   margin: 0 auto;
   @include flex;
+  @include size;
 
   #level {
     margin: 20px;
@@ -67,8 +61,7 @@
 
 div#game_over {
   @include flex;
-  width: 80%;
-  height: 80vh;
+  @include size;
   background-color: rgba(red, 0.9);
   color: white;
 
@@ -92,12 +85,11 @@ div#win {
 }
 
 #main {
-  width: 100vh;
-  height: 100%;
   background: #EAD5DF;
   overflow-x: hidden;
   padding: 50px;
   @include flex;
+  @include size;
 }
 
 .play {
